@@ -1,0 +1,28 @@
+server:
+  port: 8089
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
+spring:
+  application:
+    name: ruuniv-gateway-server
+
+  cloud:
+    gateway:
+      routes:
+        - id: ruuniv-verification-server
+          uri: lb://RUUNIV_VERIFICAITON_SERVER
+          predicates:
+            - Path=/verification-api/**
+
+        - id: ruuniv-statistics-server
+          uri: lb://RUUNIV-STATISTICS-SERVER
+          predicates:
+            - Path=/statistics-api/**
+
