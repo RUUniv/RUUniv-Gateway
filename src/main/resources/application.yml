@@ -17,12 +17,19 @@ spring:
     gateway:
       routes:
         - id: ruuniv-verification-server
-          uri: lb://RUUNIV_VERIFICAITON_SERVER
+          uri: lb://RUUNIV-VERIFICATION-SERVER
           predicates:
             - Path=/verification-api/**
+          filters:
+            - RewritePath=/verification-api/(?<segment>.*), /$\{segment}
 
         - id: ruuniv-statistics-server
           uri: lb://RUUNIV-STATISTICS-SERVER
           predicates:
             - Path=/statistics-api/**
+          filters:
+            - RewritePath=/statistics-api/(?<segment>.*), /$\{segment}
+      default-filters:
+        - name: LoggingFilter
+
 
