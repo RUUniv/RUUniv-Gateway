@@ -22,6 +22,9 @@ spring:
             - Path=/verification-api/**
           filters:
             - RewritePath=/verification-api/(?<segment>.*), /$\{segment}
+            - name: AuthenticationFilter
+              args:
+                - requiredRole: ROLE_USER
 
         - id: ruuniv-statistics-server
           uri: lb://RUUNIV-STATISTICS-SERVER
@@ -29,7 +32,13 @@ spring:
             - Path=/statistics-api/**
           filters:
             - RewritePath=/statistics-api/(?<segment>.*), /$\{segment}
+            - name: AuthenticationFilter
+              args:
+                - requiredRole: ROLE_USER
+
       default-filters:
         - name: LoggingFilter
 
 
+secret:
+  key: asdfzxcqweasdzxcasdqweqwdasdasdxzczxczxczxczxczxcascsa
