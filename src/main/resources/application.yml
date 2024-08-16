@@ -16,6 +16,20 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: ruuniv-verification-swagger
+          uri: lb://RUUNIV-VERIFICATION-SERVER
+          predicates:
+            - Path=/verification-api/swagger
+          filters:
+            - RewritePath=/verification-api/(?<segment>.*), /$\{segment}
+
+        - id: ruuniv-statistics-swagger
+          uri: lb://RUUNIV-STATISTICS-SERVER
+          predicates:
+            - Path=/statistics-api/swagger
+          filters:
+            - RewritePath=/statistics-api/(?<segment>.*), /$\{segment}
+
         - id: ruuniv-verification-server
           uri: lb://RUUNIV-VERIFICATION-SERVER
           predicates:
@@ -35,10 +49,29 @@ spring:
             - name: AuthenticationFilter
               args:
                 - requiredRole: ROLE_USER
+        - id: ruuniv-account-server
+          uri: lb://RUUNIV-ACCOUNT-SERVER
+          predicates:
+            - Path=/account-api/**
+          filters:
+            - RewritePath=/account-api/(?<segment>.*), /$\{segment}
 
       default-filters:
         - name: LoggingFilter
-
-
 secret:
   key: asdfzxcqweasdzxcasdqweqwdasdasdxzczxczxczxczxczxcascsa
+
+springdoc:
+  swagger-ui:
+    urls[0]:
+      name: Account Service
+      url: http://localhost:8089/account-api/swagger
+    urls[1]:
+      name: Statistics Service
+      url: http://localhost:8089/statistics-api/swagger
+    urls[2]:
+      name: Verification Service
+      url: http://localhost:8089/verification-api/swagger
+    use-root-path: true
+  api-docs:
+    version: openapi_3_0
