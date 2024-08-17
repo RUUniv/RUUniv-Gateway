@@ -1,12 +1,12 @@
 server:
-  port: 8089
+  port: ${PORT}
 
 eureka:
   client:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_SERVER}
 
 
 spring:
@@ -49,6 +49,17 @@ spring:
             - name: AuthenticationFilter
               args:
                 - requiredRole: ROLE_USER
+
+        - id: ruuniv-account-key-server
+          uri: lb://RUUNIV-ACCOUNT-SERVER
+          predicates:
+            - Path=/account-api/apiKey/**
+          filters:
+            - RewritePath=/account-api/(?<segment>.*), /$\{segment}
+            - name: AuthenticationFilter
+              args:
+                - requiredRole: ROLE_USER
+
         - id: ruuniv-account-server
           uri: lb://RUUNIV-ACCOUNT-SERVER
           predicates:
@@ -59,19 +70,19 @@ spring:
       default-filters:
         - name: LoggingFilter
 secret:
-  key: asdfzxcqweasdzxcasdqweqwdasdasdxzczxczxczxczxczxcascsa
+  key: ${JWT_SECRET}
 
 springdoc:
   swagger-ui:
     urls[0]:
       name: Account Service
-      url: http://localhost:8089/account-api/swagger
+      url: ${GATEWAY_URL}/account-api/swagger
     urls[1]:
       name: Statistics Service
-      url: http://localhost:8089/statistics-api/swagger
+      url: ${GATEWAY_URL}/statistics-api/swagger
     urls[2]:
       name: Verification Service
-      url: http://localhost:8089/verification-api/swagger
+      url: ${GATEWAY_URL}/verification-api/swagger
     use-root-path: true
   api-docs:
     version: openapi_3_0
