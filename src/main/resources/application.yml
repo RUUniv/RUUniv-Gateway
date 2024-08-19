@@ -7,7 +7,9 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: ${EUREKA_SERVER}
-
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
 
 spring:
   application:
