@@ -48,6 +48,7 @@ jobs:
              cd ./project
              sudo docker stop ruuniv-gateway-server
              sudo docker rm ruuniv-gateway-server
-             sudo docker rmi $(docker images -q) 
+             sudo docker rmi $(docker images -q)
+             sudo docker image prune -a
              sudo docker pull ${{ secrets.DOCKER_REPO }}/ruuniv-gateway-server
              sudo docker run -i -t --env-file ./gateway.env -p 8089:8089 -d --name ruuniv-gateway-server ${{ secrets.DOCKER_REPO }}/ruuniv-gateway-server:latest
