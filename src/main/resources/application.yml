@@ -54,7 +54,7 @@ spring:
         - id: ruuniv-account-key-server
           uri: lb://RUUNIV-ACCOUNT-SERVER
           predicates:
-            - Path=/account-api/apiKey/**
+            - Path=/account-api/api/v1/apiKeys/**
           filters:
             - RewritePath=/account-api/(?<segment>.*), /$\{segment}
             - name: AuthenticationFilter

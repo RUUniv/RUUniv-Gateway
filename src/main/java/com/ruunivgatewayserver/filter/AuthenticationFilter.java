@@ -56,6 +56,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
             log.info("Pass");
 
+            String userId = extractUserId(token);
+            addPassport(userId,request);
+
             return chain.filter(exchange);
         });
     }
@@ -70,6 +73,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         }
     }
 
+    //todo : 이후 추가적인 정보가 필요하다면 AccountServer와 통신하여 유저 정보 Passport 발행
     private String extractUserId(String token){
         try{
             return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("userId").toString();
@@ -77,6 +81,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             log.info("[AUTH] : TOKEN 추출 예외");
             return null;
         }
+    }
+
+    private void addPassport(String userId,ServerHttpRequest request){
+        request.mutate().header("passport", userId);
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
