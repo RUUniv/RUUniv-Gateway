@@ -1,5 +1,7 @@
 FROM openjdk:17
 
+ENV TZ Asia/Seoul
+
 ARG JAR_FILE_PATH=build/libs/*.jar
 
 WORKDIR /apps
